@@ -1,34 +1,51 @@
 package udesc.paa.graph.tests;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.Set;
 
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.junit.Assert;
 import org.junit.Test;
 
 import udesc.paa.graph.Printer;
 import udesc.paa.graph.SampleGraphFactory;
-import udesc.paa.graph.np.ApproxVertexCover;
 import udesc.paa.graph.np.ListHeuristicVertexCover;
 
 public class VertexCoverTest {
 
 	@Test
 	public void testCover() {
-		ApproxVertexCover approx = new ApproxVertexCover();
-		UndirectedGraph<String, DefaultEdge> graph = SampleGraphFactory.cormenFig35();
-		Set<String> solution = approx.vertexes(graph);
-		System.out.println("Aproximation Algorithm");
-		Printer.print(solution);
 		
+		UndirectedGraph<String, DefaultEdge> graph = SampleGraphFactory.cormenFig35();
+		testListHeuristicVertexCover(graph, new String[] {"b", "e", "d"});
+		
+		graph = SampleGraphFactory.cormenPag1090a();
+		testListHeuristicVertexCover(graph, new String[] {"u", "x", "y", "z"});
+		
+		graph = SampleGraphFactory.cormenPag1090b();
+		testListHeuristicVertexCover(graph, new String[] {"z", "w"});
+		
+		
+		
+	}
+	
+	
+
+	public void testListHeuristicVertexCover(UndirectedGraph<String, DefaultEdge> graph, String[] expectedCover) {
 		ListHeuristicVertexCover listHeuristic = new ListHeuristicVertexCover();
-		solution = listHeuristic.vertexes(graph);
+		Set<String> solution = listHeuristic.vertexes(graph);
 		System.out.println("List Heuristic Algorithm");
 		Printer.print(solution);
-		
-		assertTrue(true);
+		String message = "";
+		boolean isCorrect = true;
+		for (String v : expectedCover) {
+			isCorrect = solution.contains(v);
+			if (!isCorrect) {
+				message = "Expecting " + v + " but solution does not have it :(";
+			}
+			Assert.assertTrue(message, isCorrect);
+		}
 	}
+	
 
 }

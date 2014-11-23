@@ -1,5 +1,4 @@
 package udesc.paa.graph.np;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -8,56 +7,90 @@ import java.util.Set;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
+import udesc.paa.graph.utils.GraphUtils;
+
 public class ListHeuristicVertexCover implements VertexCover {
 
 	@Override
 	public Set<String>  vertexes(final UndirectedGraph<String, DefaultEdge> graph) {
 		Set<String>  leftList = listLeft(graph);
-		Set<String>  rightList = listLeft(graph);
+		Set<String>  rightList = listRight(graph);
 		
 		return leftList.size() < rightList.size() ? leftList : rightList;
 	}
 	
 	public Set<String>  listLeft(final UndirectedGraph<String, DefaultEdge> graph) {
-		Set<String>  vertexList = new HashSet<String>();
-		Set<String> graphVertexes = graph.vertexSet();
-		List<String> neighbors = new ArrayList<String>(graphVertexes);
-		for (String currentVertex : graphVertexes) {
-			boolean isNeighbor = false;
-			int i = 0;
-			while (!isNeighbor && i < neighbors.size()){
-				String neighborCandidate = neighbors.get(i);
-				isNeighbor = graph.containsEdge(currentVertex, neighborCandidate);
-				if (isNeighbor) {
-					vertexList.add(currentVertex);
+		Set<String>  result = new HashSet<String>();
+		List<String> allVertexes = GraphUtils.getSortedDescending(graph);
+		Set<DefaultEdge> edges = null;
+		String neighbor = null;
+		for (String vertex : allVertexes) {
+			edges = graph.edgesOf(vertex);
+			
+			for (DefaultEdge edge : edges) {
+				neighbor = getNeighbor(graph, vertex, edge);
+				if (!result.contains(neighbor)) {
+					result.add(vertex);
+					break;
 				}
-				i++;
 			}
 		}
-		
-		return vertexList;
+		return result;
 	}
 	
 	
 	public Set<String>  listRight(final UndirectedGraph<String, DefaultEdge> graph) {
-		Set<String>  vertexList = new HashSet<String>();
-		Set<String> graphVertexes = graph.vertexSet();
-		List<String> rightNeighbors = new ArrayList<String>(graphVertexes);
-		for (String currentVertex : graphVertexes) {
-			rightNeighbors.remove(currentVertex);
-			boolean hasRightNeighbor = false;
-			int i =  rightNeighbors.size() -1;
-			while (!hasRightNeighbor && i >= 0){
-				String neighborCandidate = rightNeighbors.get(i);
-				hasRightNeighbor = graph.containsEdge(currentVertex, neighborCandidate);
-				i--;
+		Set<String>  result = new HashSet<String>();
+		List<String> allVertexes = GraphUtils.getSortedAscending(graph);
+		Set<DefaultEdge> edges = null;
+		String neighbor = null;
+		List<String> visited = new ArrayList<String>();
+
+		for (String vertex : allVertexes) {
+			edges = graph.edgesOf(vertex);
+			
+			for (DefaultEdge edge : edges) {
+				neighbor = getNeighbor(graph, vertex, edge);
+				if (visited.contains(neighbor) && !result.contains(neighbor)) {
+					result.add(vertex);
+					break;
+				}
 			}
-			if(hasRightNeighbor){
-				vertexList.add(currentVertex);
-			}
+			visited.add(vertex);
 		}
-		
-		return vertexList;
+		return result;
 	}
+	
+	private String getNeighbor(final UndirectedGraph<String, DefaultEdge> graph, String v, DefaultEdge edge) {
+		String neighbor = graph.getEdgeTarget(edge);
+		
+		if (neighbor.equals(v)) {
+			neighbor = graph.getEdgeSource(edge);
+		}
+		return neighbor;
+	}
+	
+//	public Set<String>  list(final UndirectedGraph<String, DefaultEdge> graph) {
+//		Set<String>  result = new HashSet<String>();
+//		
+//		List<String> allVertexes =GraphUtils.getSortedDescending(graph);
+//		Set<DefaultEdge> edges = null;
+//		String neighbor = null;
+//		for (String currentVertex : allVertexes) {
+//			edges = graph.edgesOf(currentVertex);
+//			for (DefaultEdge edge : edges) {
+//				neighbor = graph.getEdgeTarget(edge);
+//				if (neighbor.equals(currentVertex)) {
+//					neighbor = graph.getEdgeSource(edge);
+//				}
+//				if (!result.contains(neighbor)) {
+//					result.add(currentVertex);
+//					break;
+//				}
+//			}
+//		}
+//		
+//		return result;
+//	}
 
 }
