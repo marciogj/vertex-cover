@@ -5,10 +5,11 @@ import java.util.Collection;
 import javax.swing.JFrame;
 
 import org.jgrapht.ListenableGraph;
-import org.jgrapht.UndirectedGraph;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableUndirectedGraph;
+
+import udesc.paa.graph.utils.NamedGraph;
 
 import com.mxgraph.layout.mxFastOrganicLayout;
 import com.mxgraph.layout.mxIGraphLayout;
@@ -21,18 +22,18 @@ public class JGraphPainter extends JFrame{
 	private static final long serialVersionUID = 2202072534703043195L;
 
 	private JGraphXAdapter<String, DefaultEdge> jgxAdapter;
-	private UndirectedGraph<String, DefaultEdge> graph;
+	private NamedGraph graph;
 
-	JGraphPainter(UndirectedGraph<String, DefaultEdge> graph) {
+	JGraphPainter(NamedGraph graph) {
 		this.graph = graph;
 		this.init();
-		this.setTitle("PAA Vertex Cover Painter");
+		this.setTitle("Vertex Cover - " + graph.getName());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 	}
 
 	public void init() {
-		ListenableGraph<String, DefaultEdge> g = new ListenableUndirectedGraph<String, DefaultEdge>(graph);
+		ListenableGraph<String, DefaultEdge> g = new ListenableUndirectedGraph<String, DefaultEdge>(graph.get());
 		jgxAdapter = new JGraphXAdapter<String, DefaultEdge>(g);
 		
 		getContentPane().add(new mxGraphComponent(jgxAdapter));

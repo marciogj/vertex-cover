@@ -8,7 +8,7 @@ import java.util.Set;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
-public class ApproxVertexCover implements VertexCover {
+public class CormenApprox implements VertexCover {
 
 	@Override
 	public Set<String>  vertexes(final UndirectedGraph<String, DefaultEdge> graph) {
@@ -35,7 +35,7 @@ public class ApproxVertexCover implements VertexCover {
 					}
 				}
 				//remove from E' every edge incident on either u or v
-				Set<DefaultEdge> targetEdges = graph.edgesOf(source);
+				Set<DefaultEdge> targetEdges = graph.edgesOf(target);
 				for (DefaultEdge tgtEdge : targetEdges) {
 					if (!tgtEdge.equals(currentEdge)) {
 						e.remove(tgtEdge);

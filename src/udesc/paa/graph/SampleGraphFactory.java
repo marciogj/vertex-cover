@@ -1,11 +1,43 @@
 package udesc.paa.graph;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
+import udesc.paa.graph.utils.NamedGraph;
+
 public class SampleGraphFactory {
 
+	public static NamedGraph frb20_15_1mis() {
+		String path = "bhoslib-benchmarks\frb30-15-mis\frb30-15-1.mis";
+		return new NamedGraph(path, DimacsGraphReader.read(path));
+	}
+	
+	//http://www.nlsde.buaa.edu.cn/~kexu/benchmarks/graph-benchmarks.htm
+	public static List<NamedGraph> BHOSLIBBenchmaks() {
+		List<NamedGraph> benchmarkList = new ArrayList<NamedGraph>();
+		File benchmarkBaseDir = new File("bhoslib-benchmarks");
+		ArrayList<File> benchmarkDirs = new ArrayList<File>(Arrays.asList(benchmarkBaseDir.listFiles()));
+		for (File benchmarkDir : benchmarkDirs) {
+			String dirName = benchmarkDir.getName();
+			String[] mvcHint = dirName.split("mvc-");
+			String minVertexCover = mvcHint.length == 2 ? mvcHint[1] : "";
+			
+			ArrayList<File> graphFiles = new ArrayList<File>(Arrays.asList(benchmarkDir.listFiles()));
+			for (File graphFile : graphFiles) {
+				benchmarkList.add(new NamedGraph(graphFile.getName(), DimacsGraphReader.read(graphFile), minVertexCover));
+			}
+		}
+		
+		
+		return benchmarkList;
+	}
+	
 	public static UndirectedGraph<String, DefaultEdge> cormenFig35() {
 		UndirectedGraph<String, DefaultEdge> graph = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
 		
@@ -91,6 +123,7 @@ public class SampleGraphFactory {
 		graph.addEdge(w, x);
 		return graph;
 	}
+	
 	
 
 }

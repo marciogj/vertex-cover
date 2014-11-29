@@ -7,9 +7,9 @@ import org.jgrapht.graph.DefaultEdge;
 import org.junit.Assert;
 import org.junit.Test;
 
-import udesc.paa.graph.Printer;
+import udesc.paa.graph.DSHelper;
 import udesc.paa.graph.SampleGraphFactory;
-import udesc.paa.graph.np.ListHeuristicVertexCover;
+import udesc.paa.graph.np.ListRight;
 
 public class VertexCoverTest {
 
@@ -32,10 +32,10 @@ public class VertexCoverTest {
 	
 
 	public void testListHeuristicVertexCover(UndirectedGraph<String, DefaultEdge> graph, String[] expectedCover) {
-		ListHeuristicVertexCover listHeuristic = new ListHeuristicVertexCover();
+		ListRight listHeuristic = new ListRight();
 		Set<String> solution = listHeuristic.vertexes(graph);
 		System.out.println("List Heuristic Algorithm");
-		Printer.print(solution);
+		DSHelper.print(solution);
 		String message = "";
 		boolean isCorrect = true;
 		for (String v : expectedCover) {

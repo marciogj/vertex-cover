@@ -39,5 +39,15 @@ public class GraphUtils {
 		return vertexList;
 	}
 	
+
+	public static String getNeighbor(final UndirectedGraph<String, DefaultEdge> graph, String v, DefaultEdge edge) {
+		String neighbor = graph.getEdgeTarget(edge);
+		
+		if (neighbor.equals(v)) {
+			neighbor = graph.getEdgeSource(edge);
+		}
+		return neighbor;
+	}
+	
 }
 

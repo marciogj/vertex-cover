@@ -2,7 +2,7 @@ package udesc.paa.graph;
 
 import java.util.Collection;
 
-public class Printer {
+public class DSHelper {
 
 	public static void print(Collection<String> list) {
 		System.out.println(toString(list));
