@@ -13,6 +13,7 @@ public class NamedGraph {
 		super();
 		this.name = name;
 		this.graph = graph;
+		minVertexCover = "";
 	}
 	
 	public NamedGraph(String name, UndirectedGraph<String, DefaultEdge> graph, String minVertexCover) {

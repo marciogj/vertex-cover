@@ -14,7 +14,12 @@ import udesc.paa.graph.utils.NamedGraph;
 public class SampleGraphFactory {
 
 	public static NamedGraph frb20_15_1mis() {
-		String path = "bhoslib-benchmarks\frb30-15-mis\frb30-15-1.mis";
+		String path = "bhoslib-benchmarks/frb30-15-mis-mvc-420/frb30-15-1.mis";
+		return new NamedGraph(path, DimacsGraphReader.read(path));
+	}
+	
+	public static NamedGraph frb59_26_5mis() {
+		String path = "bhoslib-benchmarks/frb59-26-mis-mvc-1475/frb59-26-5.mis";
 		return new NamedGraph(path, DimacsGraphReader.read(path));
 	}
 	
@@ -34,9 +39,23 @@ public class SampleGraphFactory {
 			}
 		}
 		
-		
 		return benchmarkList;
 	}
+	
+		public static List<NamedGraph> randomBenchmaks() {
+			List<NamedGraph> benchmarkList = new ArrayList<NamedGraph>();
+			File benchmarkBaseDir = new File("random-benchmark");
+			ArrayList<File> benchmarkDirs = new ArrayList<File>(Arrays.asList(benchmarkBaseDir.listFiles()));
+			for (File benchmarkDir : benchmarkDirs) {
+				
+				ArrayList<File> graphFiles = new ArrayList<File>(Arrays.asList(benchmarkDir.listFiles()));
+				for (File graphFile : graphFiles) {
+					benchmarkList.add(new NamedGraph(graphFile.getName(), DimacsGraphReader.read(graphFile)));
+				}
+			}
+			
+			return benchmarkList;
+		}
 	
 	public static UndirectedGraph<String, DefaultEdge> cormenFig35() {
 		UndirectedGraph<String, DefaultEdge> graph = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
